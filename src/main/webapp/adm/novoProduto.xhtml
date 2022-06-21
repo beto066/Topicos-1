@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:jsf="http://xmlns.jcp.org/jsf"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="titulo">Novo Produto</ui:define>
+	
+	<ui:define name="h1">
+   		<h1 class="bg-dark text-light">
+   			<h:outputLabel value=".:Olá #{novoProdutoController.usuarioLogado.nome}:."/>
+   		</h1>
+   	</ui:define>
+	
+	<ui:define name="style">
+		<h:outputStylesheet library="css" name="form.css"/>
+	</ui:define>
+
+	<ui:define name="nav">
+	 	<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Principal"
+					action="#{novoProdutoController.redirecionaDashboard}" />
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link"
+					value="| Carrinho"
+					action="#{novoProdutoController.redirecionaCarrinho}"/>
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Finalizar Compra"
+					action="#{novoProdutoController.finalizar}"/>
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Sair"
+					action="#{novoProdutoController.sair}"/>		
+		</li>
+	
+		<li class="nav-item dropdown">
+      		<h:link class="nav-link dropdown-toggle" 
+					id="navbarDropdownMenuLink" 
+					pt:data-toggle="dropdown"
+					pt:aria-haspopup="true"
+					pt:aria-expanded="false" 
+					value="| Mais opções"
+					pt:href="#"/> 
+	
+			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				<h:commandLink class="dropdown-item" 
+						value="Historico"
+						action="#{novoProdutoController.redirecionaHistorico}"/>
+			
+				<h:commandLink class="dropdown-item" 
+						value="Perfil"
+						action="#{novoProdutoController.redirecionaPerfil}"/>
+			
+				<h:commandLink class="dropdown-item active" 
+						value="Novo produto"
+						action="#{novoProdutoController.redirecionaCadastroProduto}"/>
+	
+				<h:commandLink class="dropdown-item"
+						value="Vendas"
+						action="#{novoProdutoController.redirecionaVendas}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Novo Usuario"
+						action="#{novoProdutoController.redirecionaFormUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Consulta de Usuario"
+						action="#{novoProdutoController.redirecionaConsultaUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Consulta Produto"
+		   				action="#{novoProdutoController.redirecionaConsultaProduto}"/>
+			</div>
+		</li>
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+		<div class="form-inline my-2 my-lg-0">
+			<h:inputText class="form-control mr-sm-2" 
+					name="pesquisa" 
+					value="#{novoProdutoController.pesquisa}"
+					pt:type="search"
+					pt:placeholder="Pesquisar"
+					pt:aria-label="Search"/>
+			<h:commandButton class="btn btn-outline-success my-2 my-sm-0" 
+					value="Pesquisar"
+					action="#{novoProdutoController.pesquisar}"/>
+		</div>
+	</ui:define>
+	
+	<ui:define name="alert">
+		<h:messages id="messages_novo_prod"
+				globalOnly="false"  
+				infoStyle="color:green;"  
+				warnStyle="color:yellow;"  
+				errorStyle="color:red;" />
+	</ui:define>
+	
+	<ui:define name="main">
+		<main class="form_main form centralizado">
+		<h2 class="centralizar-centro">.:Insira os dados do produto:.</h2>
+		
+			<h:form class="form centralizado" id="form_novo_produto">
+				<h:panelGrid id="pg-principal" 
+						columns="2" 
+						class="centralizado mini_table">
+						
+					<h:outputLabel for="novo_prod_fornecedor" value="Fornecedor: " class="label"/>
+					<h:selectOneMenu id="novo_prod_fornecedor" 
+							class="form-control"
+							value="#{novoProdutoController.produto.fornecedor}">
+							
+						<f:selectItems var="obj" 
+								value="#{novoProdutoController.listaFornecedor}"
+								itemLabel="#{obj.nome}" 
+								itemValue="#{obj}" />
+								
+					</h:selectOneMenu>
+							
+					<h:outputLabel for="novo_prod_valor" value="Valor: " class="label"/>
+					<h:inputText id="novo_prod_valor" 
+							class="form-control" 
+							value="#{novoProdutoController.produto.valor}"
+							pt:type="number"/>
+							
+					<h:outputLabel for="novo_prod_estoque" value="Estoque: " class="label"/>	
+					<h:inputText id="novo_prod_estoque" 
+							class="form-control" 
+							value="#{novoProdutoController.produto.estoque}"
+							pt:type="number"/>
+							
+					<h:outputLabel for="novo_prod_nivel" value="Nivel: " class="label"/>
+					<h:selectOneMenu id="novo_prod_nivel"
+							class="form-control"
+							value="#{novoProdutoController.produto.nivel}">
+							
+						<f:selectItems var="obj" 
+								value="#{novoProdutoController.listaNivel}"
+								itemLabel="#{obj.descricao}" 
+								itemValue="#{obj}" />
+								
+					</h:selectOneMenu>
+							
+					<h:outputLabel for="novo_prod_marca" value="Marca: " class="label"/>	
+					<h:inputText id="novo_prod_marca" 
+							class="form-control" 
+							value="#{novoProdutoController.produto.marca}"/>
+							
+					<h:outputLabel for="novo_prod_tipo" value="Tipo: " class="label"/>	
+					<h:inputText id="novo_prod_tipo" 
+							class="form-control" 
+							value="#{novoProdutoController.produto.tipo}"/>	
+							
+					<h:outputLabel for="novo_prod_descricao" value="Descricao: " class="label"/>	
+					<h:inputTextarea id="novo_prod_descricao" 
+							class="form-control" 
+							value="#{novoProdutoController.produto.descricao}"/>					
+				</h:panelGrid>
+				
+				<div class="centralizado WD40">
+					<h:panelGrid id="botoes"
+							columns="4" 
+							class="centralizado botoes">
+						
+						<h:commandButton id="incluir"
+								class="btn btn-primary centralizado"
+								disabled="#{novoProdutoController.produto.id != null}"
+								value="Incluir"
+								action="#{novoProdutoController.incluir}">
+							
+							<f:ajax execute="form_novo_produto" 
+									render="pg-principal messages_novo_prod"/>
+						</h:commandButton>
+						
+						<h:commandButton id="alterar" 
+								class="btn btn-primary centralizado"
+								disabled="#{novoProdutoController.produto.id == null}" 
+								value="Alterar"
+								action="#{novoProdutoController.alterar}"/>
+							
+						<h:commandButton id="excluir"
+								class="btn btn-primary centralizado"
+								disabled="#{novoProdutoController.produto.id == null}" 
+								value="Excluir"
+								action="#{novoProdutoController.excluir}">
+							
+							<f:ajax execute="@this" 
+									render=""/>
+						</h:commandButton>
+		
+						<h:commandButton id="limpar" 
+								class="btn btn-primary centralizado"
+								value="Limpar" 
+								action="#{novoProdutoController.limpar}">
+							
+							<f:ajax execute="@this" 
+									render="form_novo_produto"/>
+						</h:commandButton>
+					</h:panelGrid>
+					</div>
+			</h:form>
+		</main>
+	</ui:define>
+</ui:composition>
+</html>

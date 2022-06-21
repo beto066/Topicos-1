@@ -1,0 +1,18 @@
+.label{
+    font-size: 18px;
+}	
+
+.form_main{
+    max-width: 400px;
+    padding: 10px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+
+.botoes{
+	max-width: 350px;
+}
+
+.mini_table{
+	display: inline-block;
+}

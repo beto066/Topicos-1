@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:jsf="http://xmlns.jcp.org/jsf"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="titulo">Cadastro de Usuario</ui:define>
+	
+	<ui:define name="style">
+		<h:outputStylesheet library="css" name="form.css"/>
+	</ui:define>
+	
+	<ui:define name="h1">
+		<h1 class="bg-dark text-light">.:Cadastrar:.</h1>
+	</ui:define>
+	
+	<ui:define name="nav">
+	 	<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Principal"
+					action="#{cadastroUsuarioController.redirecionaDashboard}" />
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Logar"
+					action="#{cadastroUsuarioController.redirecionaLogin}"/>	                
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link active" 
+					value="| Cadastrar"
+					action="#{cadastroUsuarioController.redirecionaCadastroUsuario}"/>
+		</li>	
+		<li class="nav-item">
+			<h:commandLink class="nav-link"
+					value="| Carrinho"
+					action="#{cadastroUsuarioController.redirecionaCarrinho}"/>
+		</li>
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+		<div class="form-inline my-2 my-lg-0">
+			<h:inputText class="form-control mr-sm-2" 
+					name="pesquisa" 
+					value="#{cadastroUsuarioController.pesquisa}"
+					pt:type="search"
+					pt:placeholder="Pesquisar"
+					pt:aria-label="Search"/>
+			<h:commandButton class="btn btn-outline-success my-2 my-sm-0" 
+					value="Pesquisar"
+					action="#{cadastroUsuarioController.pesquisar}"/>
+		</div>
+	</ui:define>
+	
+	<ui:define name="alert">
+		<h:messages id="messages_cad_usu"
+				globalOnly="false"  
+				infoStyle="color:green;"  
+				warnStyle="color:yellow;"  
+				errorStyle="color:red;" />
+	</ui:define>
+	
+	<ui:define name="main">
+		<main class="form_main form centralizado">
+		
+			<h2 class="centralizar-centro">.:Insira seus dados:.</h2>
+		
+			<h:form class="form centralizado" id="form_cadastro_usuario">
+				<h:panelGrid id="pg-principal" 
+						columns="2" 
+						class="centralizado mini_table">
+					<h:outputLabel for="cad_usu_nome" value="Nome: "/>
+					<h:inputText id="cad_usu_nome" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.nome}"/>
+							
+					<h:outputLabel for="cad_usu_nick_name" value="NickName: "/>
+					<h:inputText id="cad_usu_nick_name" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.nomeUsuario}"/>
+							
+					<h:outputLabel for="cad_usu_senha" value="Senha: "/>	
+					<h:inputSecret id="cad_usu_senha" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.senha}"/>
+							
+					<h:outputLabel for="cad_usu_email" value="Email: "/>	
+					<h:inputText id="cad_usu_email" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.email}"
+							pt:type="email"/>	
+							
+					<h:outputLabel for="cad_usu_cpf" value="CPF: "/>	
+					<h:inputText id="cad_usu_cpf" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.cpf}"/>	
+							
+					<h:outputLabel for="cad_usu_contato" value="Dados de Contato: "/>	
+					<h:inputText id="cad_usu_contato" 
+							class="form-control" 
+							value="#{cadastroUsuarioController.usuario.contato}"/>	
+							
+					<h:outputLabel for="cad_usu_nivel_adm" value="Nivel administrador"/>
+					<h:selectOneMenu id="cad_usu_nivel_adm"
+							class="form-control"
+							value="#{cadastroUsuarioController.usuario.nivelAdm}">
+							
+						<f:selectItems var="obj" 
+								value="#{cadastroUsuarioController.listaNivelAdm}"
+								itemLabel="#{obj.descricao}" 
+								itemValue="#{obj}" />
+								
+					</h:selectOneMenu>					
+				</h:panelGrid>
+				
+				<div class="centralizado WD40">
+					<h:panelGrid id="botoes"
+							columns="4" 
+							class="centralizado botoes">
+						
+						<h:commandButton id="incluir"
+								class="btn btn-primary centralizado"
+								disabled="#{cadastroUsuarioController.usuario.id != null}"
+								value="Incluir"
+								action="#{cadastroUsuarioController.incluir}">
+							
+							<f:ajax execute="form_cadastro_usuario" 
+									render="pg-principal messages_cad_usu"/>
+						</h:commandButton>
+						
+						<h:commandButton id="alterar" 
+								class="btn btn-primary centralizado"
+								disabled="#{cadastroUsuarioController.usuario.id == null}" 
+								value="Alterar"
+								action="#{cadastroUsuarioController.alterar}"/>
+							
+						<h:commandButton id="excluir"
+								class="btn btn-primary centralizado"
+								disabled="#{cadastroUsuarioController.usuario.id == null}" 
+								value="Excluir"
+								action="#{cadastroUsuarioController.excluir}">
+							
+							<f:ajax execute="@this" 
+									render=""/>
+						</h:commandButton>
+		
+						<h:commandButton id="limpar" 
+								class="btn btn-primary centralizado"
+								value="Limpar" 
+								action="#{cadastroUsuarioController.limpar}">
+							
+							<f:ajax execute="@this" 
+									render="form_cadastro_usuario"/>
+						</h:commandButton>
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</main>
+	</ui:define>
+</ui:composition>
+		
+</html>

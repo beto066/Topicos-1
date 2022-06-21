@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:jsf="http://xmlns.jcp.org/jsf"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/index.xhtml">
+	
+	<ui:define name="titulo">Vendas</ui:define>
+	
+	<ui:define name="h1">
+   		<h1 class="bg-dark text-light">
+   			<h:outputLabel value=".:Olá #{vendaController.usuarioLogado.nome}:."/>
+   		</h1>
+   	</ui:define>
+
+	<ui:define name="nav">
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Principal"
+					action="#{vendaController.redirecionaDashboard}" />
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link"
+					value="| Carrinho"
+					action="#{vendaController.redirecionaCarrinho}"/>
+        </li>
+  		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Finalizar Compra"
+					action="#{vendaController.finalizarCompra}"/>
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Sair"
+					action="#{vendaController.sair}"/>		
+		</li>
+
+       	<li class="nav-item dropdown">
+       		<h:link class="nav-link dropdown-toggle" 
+					id="navbarDropdownMenuLink" 
+					pt:data-toggle="dropdown"
+					pt:aria-haspopup="true"
+					pt:aria-expanded="false" 
+					value="| Mais opções"
+					pt:href="#"/> 
+
+			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">	
+				<h:commandLink class="dropdown-item active" 
+						value="Historico"
+						action="#{vendaController.redirecionaHistorico}"/>
+				
+				<h:commandLink class="dropdown-item" 
+						value="Perfil"
+						action="#{vendaController.redirecionaPerfil}"/>
+						
+				<h:commandLink class="dropdown-item" 
+						value=" Novo produto "
+						action="#{vendaController.redirecionaCadastroProduto}"/>
+				
+				<h:commandLink class="dropdown-item active"
+						value="Vendas"
+						action="#{vendaController.redirecionaVendas}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Novo Usuario"
+						action="#{vendaController.redirecionaFormUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Consulta de Usuario"
+						action="#{vendaController.redirecionaConsultaUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						value="Consulta Produto"
+		   				action="#{vendaController.redirecionaConsultaProduto}"/>
+			</div>
+		</li>
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+	</ui:define>
+	
+	<ui:define name="alert">
+		<h:messages id="messages_venda"
+				globalOnly="false"  
+				infoStyle="color:green;"  
+				warnStyle="color:yellow;"  
+				errorStyle="color:red;" />
+	</ui:define>
+		
+	<ui:define name="main">
+		<main class="table_main" id="main_venda">
+			<h2 class="centralizar-centro">.:Seu historico de vendas:.</h2>
+			<h:form  class="form centralizado" id="form_venda">
+				<h:panelGrid columns="3" id="area_pesquisa">
+					<h:selectOneMenu id="venda_tipo_pesquisa"
+							class="form-control"
+							value="#{vendaController.tipoPesquisa}" onblur="submit()">
+							
+						<f:selectItems var="obj" 
+								value="#{vendaController.listaTipoPesquisa}"
+								itemLabel="#{obj.descricao}" 
+								itemValue="#{obj}"/>
+								
+						<f:ajax execute="" render="area_pesquisa"/>
+					</h:selectOneMenu>
+					
+					<h:inputText id="venda_pesquisa_texto" 
+							class="form-control" 
+							rendered="#{vendaController.tipoPesquisa.id == 2}"
+							value="#{vendaController.pesquisaTexto}"/>
+					
+					<h:inputText id="venda_pesquisa_data" 
+							class="form-control" 
+							rendered="#{vendaController.tipoPesquisa.id == 1}"
+							pt:type="date"
+							value="#{vendaController.pesquisaData}">
+						<f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+					</h:inputText>
+					
+					<h:commandButton id="pesquisar"
+							class="btn btn-primary centralizado"
+							value="Pesquisar"
+							action="#{vendaController.pesquisar}">
+					</h:commandButton>
+				</h:panelGrid>
+				
+				<div class="centralizado tabela_dados">
+					<h:dataTable class="table-responsive-lg table table-striped" 
+							value="#{vendaController.listaVenda}"
+							var="obj" 
+							id="venda_data_table">
+						<h:column>
+							<f:facet name="header">Data</f:facet>
+							<h:outputLabel value="#{obj.date}">
+								<f:convertDateTime type="localDateTime" pattern="dd/MM/yyyy 'ás' HH:mm "/>
+							</h:outputLabel>
+						</h:column>
+						<h:column>
+							<f:facet name="header">Tipo pagamento</f:facet>
+							<h:outputLabel value="#{obj.tipo_pagamento.descricao}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">Total da venda</f:facet>
+							<h:outputLabel value="#{obj.totalVenda}">
+								<f:convertNumber  locale="pt_BR" currencySymbol="R$" type="currency"/>
+							</h:outputLabel>
+						</h:column>
+						<h:column>
+							<f:facet name="header"><p class="texto_centro">Ação</p></f:facet>
+							<h:commandButton value="Detalhes..."
+									class="btn btn-primary centralizado"
+									actionListener="#{vendaController.verDetalhes(obj)}">
+								<f:ajax execute="" render="venda_data_table"/>
+							</h:commandButton>
+						</h:column>
+					</h:dataTable>
+				</div>
+			</h:form>
+		</main>
+	</ui:define>
+</ui:composition>
+		
+</html>

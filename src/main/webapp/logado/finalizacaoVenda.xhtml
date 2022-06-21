@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:jsf="http://xmlns.jcp.org/jsf"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="titulo">Cadastro de Usuario</ui:define>
+	
+	<ui:define name="style">
+		<h:outputStylesheet library="css" name="form.css"/>
+	</ui:define>
+	
+	<ui:define name="h1">
+		<h1 class="bg-dark text-light">.:Cadastrar:.</h1>
+	</ui:define>
+	
+	<ui:define name="nav">
+<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Principal"
+					action="#{perfilController.redirecionaDashboard}" />
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link"
+					value="| Carrinho"
+					action="#{perfilController.redirecionaCarrinho}"/>
+        </li>
+  		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Finalizar Compra"
+					action="#{perfilController.finalizarCompra}"/>
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Sair"
+					action="#{perfilController.sair}"/>		
+		</li>
+
+       	<li class="nav-item dropdown">
+			<h:link class="nav-link dropdown-toggle" 
+					id="navbarDropdownMenuLink" 
+					pt:data-toggle="dropdown"
+					pt:aria-haspopup="true"
+					pt:aria-expanded="false" 
+					value="| Mais opções"
+					pt:href="#"/> 
+
+			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				<h:commandLink class="dropdown-item" 
+						value="Historico"
+						action="#{perfilController.redirecionaHistorico}"/>
+				
+				<h:commandLink class="dropdown-item active" 
+						value="Perfil"
+						action="#{perfilController.redirecionaPerfil}"/>
+						
+				<h:commandLink class="dropdown-item" 
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value=" Novo produto "
+						action="#{perfilController.redirecionaCadastroProduto}"/>
+				
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Vendas"
+						action="#{perfilController.redirecionaVendas}"/>
+						
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Novo Usuario"
+						action="#{perfilController.redirecionaFormUsuario}"/>
+					
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Consulta de Usuario"
+						action="#{perfilController.redirecionaConsultaUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Consulta Produto"
+		   				action="#{perfilController.redirecionaConsultaProduto}"/>
+			</div>
+		</li>
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+		<div class="form-inline my-2 my-lg-0">
+			<h:inputText class="form-control mr-sm-2" 
+					name="pesquisa" 
+					value="#{finalizacaoVendaController.pesquisa}"
+					pt:type="search"
+					pt:placeholder="Pesquisar"
+					pt:aria-label="Search"/>
+			<h:commandButton class="btn btn-outline-success my-2 my-sm-0" 
+					value="Pesquisar"
+					action="#{finalizacaoVendaController.pesquisar}"/>
+		</div>
+	</ui:define>
+	
+	<ui:define name="alert">
+		<h:messages id="messages_final"
+				globalOnly="false"  
+				infoStyle="color:green;"  
+				warnStyle="color:yellow;"  
+				errorStyle="color:red;" />
+	</ui:define>
+	
+	<ui:define name="main">
+		<main class="form_main form centralizado">
+		
+			<h2 class="centralizar-centro">.:Insira os dados da entrega:.</h2>
+		
+			<h:form class="form centralizado" id="form_final">
+				<h:panelGrid id="pg-principal" 
+						columns="2" 
+						class="centralizado mini_table">
+					<h:outputLabel for="final_cidade" value="Cidade: "/>
+					<h:inputText id="final_cidade" 
+							class="form-control" 
+							value="#{finalizacaoVendaController.entrega.cidade}"/>
+							
+					<h:outputLabel for="final_bairro" value="Bairro: "/>
+					<h:inputText id="final_bairro" 
+							class="form-control" 
+							value="#{finalizacaoVendaController.entrega.bairo}"/>
+							
+					<h:outputLabel for="final_logradouro" value="Logradouro: "/>	
+					<h:inputSecret id="final_logradouro" 
+							class="form-control" 
+							value="#{finalizacaoVendaController.entrega.logradouro}"/>
+							
+					<h:outputLabel for="final_cep" value="CEP: "/>	
+					<h:inputText id="final_cep" 
+							class="form-control" 
+							value="#{finalizacaoVendaController.entrega.cep}"
+							pt:type="email"/>	
+							
+					<h:outputLabel for="final_referencia" value="Referencia: "/>	
+					<h:inputText id="final_referencia" 
+							class="form-control" 
+							value="#{finalizacaoVendaController.entrega.referencia}"/>	
+							
+					<h:outputLabel for="final_tipo_pagamento" value="Tipo pagamento"/>
+					<h:selectOneMenu id="final_tipo_pagamento"
+							class="form-control"
+							value="#{finalizacaoVendaController.idTipoPagamento}">
+							
+						<f:selectItems var="obj" 
+								value="#{finalizacaoVendaController.listaTipoPagamento}"
+								itemLabel="#{obj.descricao}" 
+								itemValue="#{obj.id}" />
+								
+					</h:selectOneMenu>					
+				</h:panelGrid>
+				
+				<div class="centralizado WD40">
+					<h:panelGrid id="botoes"
+							columns="4" 
+							class="centralizado botoes">
+						
+						<h:commandButton id="finalizar"
+								class="btn btn-primary centralizado"
+								value="finalizar"
+								action="#{finalizacaoVendaController.finalizar}">
+							
+							<f:ajax execute="form_final" 
+									render="pg-principal messages_final"/>
+						</h:commandButton>
+		
+						<h:commandButton id="limpar" 
+								class="btn btn-primary centralizado"
+								value="Limpar" 
+								action="#{finalizacaoVendaController.limpar}">
+							
+							<f:ajax execute="@this" 
+									render="form_cadastro_usuario"/>
+						</h:commandButton>
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</main>
+	</ui:define>
+</ui:composition>
+		
+</html>

@@ -1,0 +1,6 @@
+.botoes_login > tbody{
+	max-width: 175px;
+	display: block;
+    margin-right: auto;
+    margin-left: auto;
+}

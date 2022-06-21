@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:jsf="http://xmlns.jcp.org/jsf"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/index.xhtml">
+	
+	<ui:define name="titulo">Historico</ui:define>
+	
+	<ui:define name="h1">
+   		<h1 class="bg-dark text-light">
+   			<h:outputLabel value=".:Olá #{detalhesVendaController.usuarioLogado.nome}:."/>
+   		</h1>
+   	</ui:define>
+
+	<ui:define name="nav">
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Principal"
+					action="#{detalhesVendaController.redirecionaDashboard}" />
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link"
+					value="| Carrinho"
+					action="#{detalhesVendaController.redirecionaCarrinho}"/>
+        </li>
+  		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Finalizar Compra"
+					action="#{detalhesVendaController.finalizarCompra}"/>
+		</li>
+		<li class="nav-item">
+			<h:commandLink class="nav-link" 
+					value="| Sair"
+					action="#{detalhesVendaController.sair}"/>		
+		</li>
+
+       	<li class="nav-item dropdown">
+       		<h:link class="nav-link dropdown-toggle" 
+					id="navbarDropdownMenuLink" 
+					pt:data-toggle="dropdown"
+					pt:aria-haspopup="true"
+					pt:aria-expanded="false" 
+					value="| Mais opções"
+					pt:href="#"/> 
+
+			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">	
+				<h:commandLink class="dropdown-item active" 
+						value="Historico"
+						action="#{detalhesVendaController.redirecionaHistorico}"/>
+				
+				<h:commandLink class="dropdown-item" 
+						value="Perfil"
+						action="#{detalhesVendaController.redirecionaPerfil}"/>
+						
+				<h:commandLink class="dropdown-item" 
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value=" Novo produto "
+						action="#{detalhesVendaController.redirecionaCadastroProduto}"/>
+				
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Vendas"
+						action="#{detalhesVendaController.redirecionaVendas}"/>
+						
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Novo Usuario"
+						action="#{detalhesVendaController.redirecionaFormUsuario}"/>
+					
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Consulta de Usuario"
+						action="#{detalhesVendaController.redirecionaConsultaUsuario}"/>
+						
+				<h:commandLink class="dropdown-item"
+						rendered="#{carrinhoController.usuarioLogado.nivelAdm.id != 1}"
+						value="Consulta Produto"
+		   				action="#{detalhesVendaController.redirecionaConsultaProduto}"/>
+			</div>
+		</li>
+	</ui:define>
+	
+	<ui:define name="alert">
+		<h:messages id="messages_historico"
+				globalOnly="false"  
+				infoStyle="color:green;"  
+				warnStyle="color:yellow;"  
+				errorStyle="color:red;" />
+	</ui:define>
+		
+	<ui:define name="main">
+		<main class="table_main" id="main_historico">
+			<h2 class="centralizar-centro">.:Seu historico de vendas:.</h2>
+			<h:form  class="form centralizado" id="form_historico">
+				<div class="centralizado tabela_dados card">
+					<div class="card-header">
+						<p class="texto_centro">
+							<h:outputText value="Venda feita no dia "/>
+							<h:outputText value="#{detalhesVendaController.venda.date}">
+								<f:convertDateTime type="localDateTime" pattern="dd/MM/yyyy 'ás' HH:mm ' horas'"/>
+							</h:outputText>
+						</p>
+					</div>
+					
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">
+							<h:outputText class="afastado" value="Tipo de pagamento da venda: #{detalhesVendaController.venda.tipo_pagamento.descricao}"/>
+						</li>
+						<li class="list-group-item">
+							<h:outputText class="afastado" value="Valor total da venda: "/>
+							<h:outputText value="#{detalhesVendaController.venda.totalVenda}">
+								<f:convertNumber  locale="pt_BR" currencySymbol="R$" type="currency"/>
+							</h:outputText>
+						</li>
+					</ul>
+					
+					<div class="card-body">
+						<h:dataTable class="table-responsive-lg table table-striped" 
+								value="#{detalhesVendaController.venda.listaItem}"
+								var="obj" 
+								id="historico_data_table">
+							<h:column>
+								<f:facet name="header">Quant.</f:facet>
+								<h:outputLabel value="#{obj.quantidade}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Valor</f:facet>
+								<h:outputLabel value="#{obj.valor}">
+									<f:convertNumber  locale="pt_BR" currencySymbol="R$" type="currency"/>
+								</h:outputLabel>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Nivel</f:facet>
+								<h:outputLabel value="#{obj.produto.nivel.descricao}"/>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Descrição</f:facet>
+								<h:outputLabel value="#{obj.produto.descricao}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Marca</f:facet>
+								<h:outputLabel value="#{obj.produto.marca}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Tipo</f:facet>
+								<h:outputLabel value="#{obj.produto.tipo}" />
+							</h:column>
+						</h:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</main>
+	</ui:define>
+</ui:composition>
+		
+</html>
