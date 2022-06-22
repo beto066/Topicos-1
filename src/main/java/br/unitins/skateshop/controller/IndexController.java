@@ -23,7 +23,7 @@ import br.unitins.skateshop.model.Usuario;
 import br.unitins.skateshop.model.Venda;
 
 /**
- * Controlador do tamplate
+ * Controlador do tamplate e da tela principal.
  */
 @Named
 @ViewScoped
