@@ -22,6 +22,9 @@ import br.unitins.skateshop.model.TipoPagamento;
 import br.unitins.skateshop.model.Usuario;
 import br.unitins.skateshop.model.Venda;
 
+/**
+ * Controlador do tamplate
+ */
 @Named
 @ViewScoped
 public class IndexController implements Redirect, Serializable {
