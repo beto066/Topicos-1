@@ -24,6 +24,7 @@ import br.unitins.skateshop.model.Venda;
 
 /**
  * Controlador do tamplate e da tela principal.
+ * @author 55989
  */
 @Named
 @ViewScoped
